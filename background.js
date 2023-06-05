@@ -2,7 +2,12 @@ let isOn = false
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     isOn = request.message
     if (isOn) {
-        chrome.tabs.create({url: 'https://app.sellerrunning.com/orders?Status=PreConfirmed'})
+        if (request.url === 'preconfirmed') {
+            chrome.tabs.create({url: 'https://app.sellerrunning.com/orders?Status=PreConfirmed'})
+        }
+        if (request.url === 'confirmed') {
+            chrome.tabs.create({url: 'https://app.sellerrunning.com/orders?Status=Confirmed'})
+        }
     } else {
         chrome.storage.local.clear()
     }

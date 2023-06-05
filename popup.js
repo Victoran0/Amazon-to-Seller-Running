@@ -5,31 +5,30 @@ const content2 = document.createElement('button')
 const content3 = document.createElement('button')
 const content4 = document.createElement('button')
 
-content.classList.add('content')
 content.type = 'submit'
 content.innerHTML = 'Shipped +'
 
-content4.classList.add('content4')
-content.type = 'submit'
-content.innerHTML = 'Shipped +'
+content4.type = 'submit'
+content4.innerHTML = 'Confirmed +'
 
 
 content2.type = 'submit'
 content2.innerHTML = 'Disable'
-content2.classList.add('content2')
 
-content3.classList.add('content3')
 content3.type = 'submit'
 content3.innerHTML = 'EXIT'
 
 
-container.append(content, content2, content3, content4)
+container.append(content , content4, content2, content3)
 
 
 content.addEventListener(('click'), () => {
-    chrome.runtime.sendMessage({message: true})
+    chrome.runtime.sendMessage({message: true, url: 'preconfirmed'})
 })
 
+content4.addEventListener(('click'), () => {
+    chrome.runtime.sendMessage({message: true, url: 'confirmed'})
+})
 
 content2.addEventListener(('click'), () => {
     chrome.runtime.sendMessage({message: false})

@@ -1,0 +1,45 @@
+.cscript {
+    background: #0B207A;
+    position: fixed;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 2px solid #0B207A;
+    color: white;
+    right: 17px;
+}
+
+.cscriptbtn {
+    bottom: 100px;
+    font-weight: bolder;
+    width: 60px;
+    height: 60px;
+}
+
+.cscriptbtn1 {
+    bottom: 230px;
+}
+
+.cscriptbtn2 {
+    bottom: 170px;
+}
+
+.cscriptbtn3 {
+    bottom: 200px;
+}
+
+.cscript-content-div {
+    display: none;
+}
+
+.cscriptbtn:hover {
+    transform: scale(1.1)
+}
+.cscriptbtn1:hover {
+    transform: scale(1.1)
+}
+.cscriptbtn2:hover {
+    transform: scale(1.1)
+}
+.cscriptbtn3:hover {
+    transform: scale(1.1)
+}

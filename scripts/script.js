@@ -50,9 +50,10 @@ const addShipmentFunc = (url, carr, ID) => {
     submitBtn.click()
 }
 
-const setOrderData = (orderData, orderId, orderNum, amazonPageLink) => {
+const setOrderData = (orderData, orderId, orderNum, amazonPageLink, bool) => {
     orderData[orderId] = {
-        'isShipped': false,
+        'isShipped': bool,
+        'isDelivered': false,
         'orderNum': orderNum,
         'carrier': '',
         'trackingId': '',
@@ -62,6 +63,15 @@ const setOrderData = (orderData, orderId, orderNum, amazonPageLink) => {
     chrome.storage.local.set({key: JSON.stringify(orderData)})
     window.open(amazonPageLink)
     window.close()
+}
+
+const setDelivered = () => {
+    const orderForm = document.getElementById('UpdateOrderContents')
+    const submitBtn = orderForm.getElementsByTagName('button')[0]
+    const select = document.getElementById('OrderDetailOrderContentsModelUpdate_OrderStatus')
+
+    select.value = 'Delivered'
+    submitBtn.click()
 }
 
 const orderPageAction = async () => {
@@ -76,6 +86,9 @@ const orderPageAction = async () => {
 
         const addShipment = document.querySelector('.btn-link.add-shipment-item.float-right')
 
+        const edit = document.querySelector('.btn-link.edit-order-item')
+        console.log('editBtn:', edit)
+
         if (!shipped) {
             if (Object.keys(orderData) !== 0 ) {
                 if (orderData[orderId] && orderData[orderId]['isShipped']) {
@@ -84,10 +97,23 @@ const orderPageAction = async () => {
                     setTimeout(() => addShipmentFunc(orderData[orderId]['trackingURL'], orderData[orderId]['carrier'], orderData[orderId]['trackingId']), 4000)
                     
                 } else {
-                    setOrderData(orderData, orderId, orderNum, amazonPageLink)
+                    setOrderData(orderData, orderId, orderNum, amazonPageLink, false)
                 }
             } else {
-                setOrderData(orderDetails, orderId, orderNum, amazonPageLink)
+                setOrderData(orderDetails, orderId, orderNum, amazonPageLink, false)
+            }
+        }
+
+        if (shipped && shipped.textContent === 'Confirmed') {
+            if (Object.keys(orderData) !== 0) {
+                if (orderData[orderId] && orderData[orderId]['isDelivered']) {
+                    edit.click()
+                    setTimeout(() => setDelivered(), 4000)
+                } else {
+                    setOrderData(orderDetails, orderId, orderNum, amazonPageLink, true)
+                }
+            } else {
+                setOrderData(orderDetails, orderId, orderNum, amazonPageLink, true)
             }
         }
 }

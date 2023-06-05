@@ -8,10 +8,33 @@ const fetchData = async () => {
     return obj
 }
 
-const clickTrackPackage = () => {
+const clickTrackPackage = async () => {
+    const data = await fetchData()
+
     const trackPackageSpan = document.querySelector('.a-button.a-button-primary.track-package-button')
     const trackPackageLink = trackPackageSpan.getElementsByTagName('a')[0]
-    trackPackageLink.click()
+
+    const bdi = document.getElementsByTagName('bdi')[0]
+    console.log('bdiElement:', bdi)
+    const orderId = bdi.textContent
+
+    const div = document.querySelector('.a-row.shipment-top-row.js-shipment-info-container')
+    const status = div.getElementsByTagName('span')[0]
+    const statusText = status.textContent.split(' ')[0]
+
+    if (data[orderId]['isShipped']) {
+        if (statusText === 'Delivered') {
+            data[orderId]['isDelivered'] = true
+            chrome.storage.local.set({key: JSON.stringify(data)})
+            
+            window.open(`https://app.sellerrunning.com/orders/${data[orderId]['orderNum']}`)
+        }
+        window.close()
+
+    } else {
+        trackPackageLink.click()
+    }
+
 }
 
 const getPackageDetails = async (url) => {
