@@ -1,0 +1,23 @@
+body {
+    min-width: 98px;
+    min-height: 110px;
+    background-color: #0B207A;
+}
+
+button {
+    cursor: pointer;
+}
+
+.content {
+    padding: 5px 25px;
+}
+
+.content2 {
+    margin-top: 8px;
+    padding: 5px 27px;
+}
+
+.content3 {
+    margin-top: 8px;
+    padding: 5px 32px;
+}
