@@ -6,22 +6,25 @@ const orderListPageAction = () => {
     const allOrders = tableBody.getElementsByTagName('tr')
 
     const nextBtnEle = document.querySelector('.page-item.PagedList-skipToNext')
+    
     let nextBtn;
+    
     if (nextBtnEle) {
         nextBtn = nextBtnEle.querySelector('.page-link')
     }
-
+    
     for (let i = 0; i<allOrders.length; i++) {
-        if (!allOrders[i].contains(allOrders[i].querySelector('.fe.fe-home.text-primary-sr'))) {
-            const orderPageId = allOrders[i].getElementsByTagName('a')[0].href.split('orders/')[1]
-            window.open(`orders/${orderPageId}`)
+        if (!allOrders[i].contains(allOrders[i].querySelector('.fe.fe-home.text-primary-sr')) && allOrders[i].contains(allOrders[i].querySelector('.avatar-group.d-none.d-sm-flex'))) {
+            setTimeout(() => {
+                window.open(allOrders[i].getElementsByTagName('a')[0].href)
+            }, 1000 * i)
         }
     }
-
+    
     if (nextBtn !== undefined) {
-        window.open(nextBtn.href)
+        setTimeout(() => window.open(nextBtn.href), (1 + allOrders.length) * 1000)
     }
-    window.close()
+    setTimeout(() => window.close(), (1.3 + allOrders.length) * 1000)
 }
 
 
@@ -79,6 +82,7 @@ const orderPageAction = async () => {
 
         const orderNum = window.location.href.split('orders/')[1]
         const shipped = document.querySelector('.badge.badge-success.fs-p90')
+        const delivered = document.querySelector('.badge.badge-primary.fs-p90')
         const buyerOtd = document.querySelector('[data-original-title="View order on Amazon.com"]')
 
         const orderId = buyerOtd.textContent
@@ -87,9 +91,8 @@ const orderPageAction = async () => {
         const addShipment = document.querySelector('.btn-link.add-shipment-item.float-right')
 
         const edit = document.querySelector('.btn-link.edit-order-item')
-        console.log('editBtn:', edit)
 
-        if (!shipped) {
+        if (!shipped && !delivered) {
             if (Object.keys(orderData) !== 0 ) {
                 if (orderData[orderId] && orderData[orderId]['isShipped']) {
                     addShipment.click()
@@ -104,13 +107,15 @@ const orderPageAction = async () => {
             }
         }
 
-        if (shipped && shipped.textContent === 'Confirmed') {
+        if (shipped && !delivered) {
             if (Object.keys(orderData) !== 0) {
-                if (orderData[orderId] && orderData[orderId]['isDelivered']) {
-                    edit.click()
-                    setTimeout(() => setDelivered(), 4000)
+                if (orderData[orderId]) {
+                    if (orderData[orderId]['isDelivered']) {
+                        edit.click()
+                        setTimeout(() => setDelivered(), 4000)
+                    }
                 } else {
-                    setOrderData(orderDetails, orderId, orderNum, amazonPageLink, true)
+                    setOrderData(orderData, orderId, orderNum, amazonPageLink, true)
                 }
             } else {
                 setOrderData(orderDetails, orderId, orderNum, amazonPageLink, true)
@@ -132,5 +137,3 @@ chrome.runtime.onMessage.addListener((obj, sender, request) => {
         orderListPageAction()
     }
 })
-
-

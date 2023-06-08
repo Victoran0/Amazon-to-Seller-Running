@@ -3,7 +3,7 @@
     "manifest_version": 3,
     "description": "A google Chrome extension that scrapes A shipped order details from Amazon to Seller Running",
     "version": "1.0",
-    "permissions": ["storage", "tabs"],
+    "permissions": ["storage", "tabs", "unlimitedStorage"],
     "background": {
         "service_worker": "background.js"
     },

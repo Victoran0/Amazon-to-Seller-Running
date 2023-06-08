@@ -12,15 +12,17 @@ const clickTrackPackage = async () => {
     const data = await fetchData()
 
     const trackPackageSpan = document.querySelector('.a-button.a-button-primary.track-package-button')
-    const trackPackageLink = trackPackageSpan.getElementsByTagName('a')[0]
+    let trackPackageLink;
+    if (trackPackageSpan) {
+        trackPackageLink = trackPackageSpan.getElementsByTagName('a')[0]
+    }
 
     const bdi = document.getElementsByTagName('bdi')[0]
-    console.log('bdiElement:', bdi)
     const orderId = bdi.textContent
 
     const div = document.querySelector('.a-row.shipment-top-row.js-shipment-info-container')
     const status = div.getElementsByTagName('span')[0]
-    const statusText = status.textContent.split(' ')[0]
+    const statusText = status.textContent.split('\n')[1].trim().split(' ')[0]
 
     if (data[orderId]['isShipped']) {
         if (statusText === 'Delivered') {
@@ -30,7 +32,6 @@ const clickTrackPackage = async () => {
             window.open(`https://app.sellerrunning.com/orders/${data[orderId]['orderNum']}`)
         }
         window.close()
-
     } else {
         trackPackageLink.click()
     }
@@ -56,7 +57,6 @@ const getPackageDetails = async (url) => {
         
         window.open(`https://app.sellerrunning.com/orders/${data[orderId]['orderNum']}`)
     }
-    
     window.close()
 }
 

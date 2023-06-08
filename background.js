@@ -17,7 +17,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (isOn) {
         if (changeInfo.status === 'complete') {
-            if (tab.url && tab.url.includes('sellerrunning.com/orders?Status=PreConfirmed')) {
+            if (tab.url && tab.url.includes('Status=PreConfirmed') || tab.url.includes('Status=Confirmed')) {
                 chrome.tabs.sendMessage(tabId, {
                     message: 'orders page'
                 })
